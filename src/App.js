@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useRef, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const videoRef = useRef();
+    useEffect(() => {
+        document.addEventListener(
+            "scroll",
+            function () {
+                if (isInViewport(videoRef.current)) {
+                    videoRef.current.play();
+                }
+            },
+            {
+                passive: true,
+            }
+        );
+    }, []);
+    return (
+        <div className="App">
+            <div style={{ height: "100vh" }}></div>
+            <video ref={videoRef} src="./video.mp4" controls preload="auto"></video>
+        </div>
+    );
 }
 
 export default App;
+function isInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
